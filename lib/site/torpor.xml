@@ -1,0 +1,92 @@
+<trpr:TorporConfig
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.tricornersoftware.com/Products/Torpor/Config/0.1 TorporConfig.xsd"
+	xmlns:trpr="http://www.tricornersoftware.com/Products/Torpor/Config/0.1"
+	version="0.1">
+	<Options>
+		<TypedGridClasses>true</TypedGridClasses>
+	</Options>
+	<Repository>
+		<DataStore type="MySQL">
+			<Parameter name="host" value="localhost"/>
+			<Parameter name="user" value="paul"/>
+			<Parameter name="password" value="gr1bby?!"/>
+			<Parameter name="database" value="paul"/>
+			<Parameter name="character_set" value="latin1"/>
+			<Parameter name="collation" value="latin1_swedish_ci"/>
+		</DataStore>
+	</Repository>
+	<Grids>
+		<Grid dataName="Measurement" class="AutoSoap">
+			<Columns>
+				<Column dataName="ID" generatedOnPublish="true" nullable="false" type="integer"/>
+				<Column dataName="UserID" nullable="false" type="integer"/>
+				<Column dataName="CategoryID" nullable="false" type="integer"/>
+				<Column dataName="Timestamp" generatedOnPublish="true" nullable="false" type="datetime"/>
+				<Column dataName="Name" encoding="ISO-8859-1" length="255" type="varchar"/>
+				<Column dataName="Duration" default="0" nullable="false" type="integer"/>
+				<Column dataName="Value" nullable="false" precision="22" type="float"/>
+				<Column dataName="Latitude" precision="12" type="float"/>
+				<Column dataName="Longitude" precision="12" type="float"/>
+			</Columns>
+			<Keys>
+				<Foreign>
+					<Key column="UserID" referenceGrid="User" referenceColumn="ID"/>
+					<Key column="CategoryID" referenceGrid="MeasurementCategory" referenceColumn="ID"/>
+				</Foreign>
+				<Primary>
+					<Key column="ID"/>
+				</Primary>
+			</Keys>
+		</Grid>
+		<Grid dataName="MeasurementCategory">
+			<Columns>
+				<Column dataName="ID" generatedOnPublish="true" nullable="false" type="integer"/>
+				<Column dataName="ParentCategoryID" type="integer"/>
+				<Column dataName="Name" encoding="ISO-8859-1" length="255" nullable="false" type="varchar"/>
+			</Columns>
+			<Keys>
+				<Foreign>
+					<Key column="ParentCategoryID" referenceGrid="MeasurementCategory" referenceColumn="ID" referenceGridAlias="ParentCategory"/>
+				</Foreign>
+				<Primary>
+					<Key column="ID"/>
+				</Primary>
+			</Keys>
+		</Grid>
+		<Grid dataName="MeasurementDecode">
+			<Columns>
+				<Column dataName="CategoryID" nullable="false" type="integer"/>
+				<Column dataName="Title" default="Default" encoding="ISO-8859-1" length="255" nullable="false" type="varchar"/>
+				<Column dataName="Min" precision="22" type="float"/>
+				<Column dataName="Max" precision="22" type="float"/>
+				<Column dataName="Interval" precision="22" type="float"/>
+			</Columns>
+			<Keys>
+				<Foreign>
+					<Key column="CategoryID" referenceGrid="MeasurementCategory" referenceColumn="ID"/>
+				</Foreign>
+				<Primary>
+					<Key column="CategoryID"/>
+					<Key column="Title"/>
+				</Primary>
+			</Keys>
+		</Grid>
+		<Grid dataName="User">
+			<Columns>
+				<Column dataName="ID" generatedOnPublish="true" nullable="false" type="integer"/>
+				<Column dataName="Email" encoding="ISO-8859-1" length="255" nullable="false" type="varchar"/>
+				<Column dataName="Password" encoding="ISO-8859-1" length="32" nullable="false" type="varchar"/>
+				<Column dataName="Active" class="CharBool" default="Y" encoding="ISO-8859-1" length="1" nullable="false" type="varchar"/>
+			</Columns>
+			<Keys>
+				<Primary>
+					<Key column="ID"/>
+				</Primary>
+				<Unique>
+					<Key column="Email"/>
+				</Unique>
+			</Keys>
+		</Grid>
+	</Grids>
+</trpr:TorporConfig>

@@ -1,0 +1,24 @@
+# SetEnv TORPOR_CONFIG lib/site/torpor.xml
+SetEnv GIMLI_PATH_PREFIX /gimli
+
+RewriteEngine On
+
+RewriteBase /gimli
+
+RewriteCond %{REQUEST_URI} CVS [OR]
+RewriteCond %{REQUEST_URI} \.svn [OR]
+RewriteCond %{REQUEST_URI} \.git
+RewriteRule . - [F] 
+
+# Redirection config:
+# /something => /index.php?page=something
+# /something?whatever => /index.php?page=something&action=whatever
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} .*/[a-zA-Z0-9]
+RewriteRule ^(.*)/(.*)$ index.php?__page=$1&__action=$2 [QSA,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)?$ index.php?__page=$1 [QSA,L] 

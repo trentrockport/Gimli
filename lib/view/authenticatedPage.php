@@ -1,0 +1,1 @@
+Successfully accessed authenticated page.
